@@ -25,7 +25,6 @@
 
         cast: function() {
             this.triggerValue = Controller.getValue(Controller.Keyboard.T);
-            print(Controller.getValue(Controller.Keyboard.T));
 
             if(this.triggerValue){
                 Audio.playSound(this.fireSound, {
@@ -43,6 +42,10 @@
         }
     };
 
+    Controller.keyPressEvent.connect(function(event){
+       print ("The " + event.text + " key has been released");
+      print(Controller.getValue(Controller.Keyboard.T));
+    });
     // entity scripts always need to return a newly constructed object of our type
     return new Box();
 });
