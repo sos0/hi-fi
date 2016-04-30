@@ -10,9 +10,6 @@
         this.fireVolume = 0.5;
         this.equipped = false;
     };
-    Controller.hardwareChanged.connect(function(){
-        print("Hardware changed");
-    });
 
     Box.prototype = {
         startEquip: function(id, params) {
@@ -42,7 +39,7 @@
 
         preload: function(entityID) {
             this.entityID = entityID;
-        },
+        }
     };
 
     // entity scripts always need to return a newly constructed object of our type
