@@ -6,7 +6,9 @@
 
     Box = function() {
         _this = this;
-        this.equipped = false;
+        this.fireSound = SoundCache.getSound("http://hifi-production.s3.amazonaws.com/tutorials/pistol/GUN-SHOT2.raw");
+        this.fireVolume = 0.5;
+        this.equipped = true;
     };
 
     Box.prototype = {
@@ -18,13 +20,17 @@
             if (!this.equipped) {
                 return;
             }
-            this.updateProps();
+            this.cast();
         },
 
-        updateProps: function() {
-            var gunProps = Entities.getEntityProperties(this.entityID, ['position', 'rotation']);
-            this.position = gunProps.position;
-            this.rotation = gunProps.rotation;
+        cast: function() {
+            this.triggerValue = Controller.getValue(Controller.Keyboard.T);
+
+            if(this.triggerValue){
+                Audio.playSound(this.fireSound, {
+                    volume: this.fireVolume
+                });
+            }
         },
 
         releaseEquip: function(id, params) {
@@ -33,9 +39,13 @@
 
         preload: function(entityID) {
             this.entityID = entityID;
-        },
+        }
     };
 
+    Controller.keyPressEvent.connect(function(event){
+       print ("The " + event.text + " key has been released");
+      print(Controller.getValue(Controller.Keyboard.T));
+    });
     // entity scripts always need to return a newly constructed object of our type
     return new Box();
 });
