@@ -1,7 +1,7 @@
 //
 //
 
-var MODEL_URL = "https://dl.dropbox.com/s/1zsyxcr4n6yixnk/test_box_2.fbx";
+var MODEL_URL = "https://dl.dropboxusercontent.com/s/1zsyxcr4n6yixnk/test_box_2.fbx";
 var boxProperties = {
   type: 'Model',
   modelURL: MODEL_URL,
@@ -39,5 +39,5 @@ Entities.addingEntity.connect(function(entityID){
   print ("Entity added.");
 });
 // attachEntityAtArm("RightForeArm");
-MyAvatar.attach(MODEL_URL, "RightForeArm", {x: -0.0, y: -0.0, z: 0.0}, Quat.fromPitchYawRollDegrees(0, 0, 0), 1.5);
-// Script.stop();
+MyAvatar.attach(MODEL_URL, "RightForeArm", {x: -0.0, y: -0.0, z: 0.0}, Quat.fromPitchYawRollDegrees(0, 0, 0), 0.2);
+Script.stop();
