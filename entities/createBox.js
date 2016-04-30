@@ -9,6 +9,7 @@
 var center = Vec3.sum(MyAvatar.position, Vec3.multiply(1.5, Quat.getFront(Camera.getOrientation())));
 var SCRIPT_URL = "box.js";
 var MODEL_URL = "https://dl.dropbox.com/s/1zsyxcr4n6yixnk/test_box_2.fbx";
+var SCRIPT_URL = "http://hifi-production.s3.amazonaws.com/tutorials/entity_scripts/pistol.js";
 
 var boxProperties = {
   type: 'Model',

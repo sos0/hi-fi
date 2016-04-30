@@ -5,10 +5,11 @@ var MODEL_URL = "https://dl.dropboxusercontent.com/s/1zsyxcr4n6yixnk/test_box_2.
 var boxProperties = {
   type: 'Model',
   modelURL: MODEL_URL,
+  parentID: MyAvatar.sessionUUID,
   dimensions: {
-    x: 0.5,
-    y: 0.5,
-    z: 0.5
+    x: 0.1,
+    y: 0.1,
+    z: 0.1
   },
   color: {
     red: 200,
@@ -16,11 +17,6 @@ var boxProperties = {
     blue: 20
   },
   shapeType: 'box',
-  gravity: {
-    x: 0,
-    y: -5.0,
-    z: 0
-  },
   lifetime: -1,
   restitution: 0,
   collisionless: true
@@ -38,6 +34,7 @@ function attachEntityAtArm(jointName) {
 Entities.addingEntity.connect(function(entityID){
   print ("Entity added.");
 });
-// attachEntityAtArm("RightForeArm");
-MyAvatar.attach(MODEL_URL, "RightForeArm", {x: -0.0, y: -0.0, z: 0.0}, Quat.fromPitchYawRollDegrees(0, 0, 0), 0.2);
+attachEntityAtArm("RightForeArm");
+
+// MyAvatar.attach(MODEL_URL, "RightForeArm", {x: -0.0, y: -0.0, z: 0.0}, Quat.fromPitchYawRollDegrees(0, 0, 0), 0.2);
 Script.stop();
