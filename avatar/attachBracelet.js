@@ -2,9 +2,11 @@
 //
 
 var MODEL_URL = "https://dl.dropboxusercontent.com/s/1zsyxcr4n6yixnk/test_box_2.fbx";
+var SCRIPT_URL = "../entities/box.js";
 var boxProperties = {
   type: 'Model',
   modelURL: MODEL_URL,
+  script: SCRIPT_URL,
   parentID: MyAvatar.sessionUUID,
   dimensions: {
     x: 0.1,
