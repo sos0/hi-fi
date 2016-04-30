@@ -25,6 +25,7 @@
 
         cast: function() {
             this.triggerValue = Controller.getValue(Controller.Keyboard.T);
+            print(Controller.getValue(Controller.Keyboard.T));
 
             if(this.triggerValue){
                 Audio.playSound(this.fireSound, {
