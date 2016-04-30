@@ -8,7 +8,7 @@
         _this = this;
         this.fireSound = SoundCache.getSound("http://hifi-production.s3.amazonaws.com/tutorials/pistol/GUN-SHOT2.raw");
         this.fireVolume = 0.5;
-        this.equipped = false;
+        this.equipped = true;
     };
 
     Box.prototype = {

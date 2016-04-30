@@ -2,7 +2,7 @@
 //
 
 var MODEL_URL = "https://dl.dropboxusercontent.com/s/1zsyxcr4n6yixnk/test_box_2.fbx";
-var SCRIPT_URL = "https://raw.githubusercontent.com/sos0/hi-fi/master/entities/box.js";
+var SCRIPT_URL = "https://rawgit.com/sos0/hi-fi/master/entities/box.js";
 var boxProperties = {
   type: 'Model',
   modelURL: MODEL_URL,
