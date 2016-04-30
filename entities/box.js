@@ -27,7 +27,7 @@
         },
 
         cast: function() {
-            this.triggerValue = Controller.getValue(Controller.Standard.RT);
+            this.triggerValue = Controller.getValue(Controller.Hardware.Keyboard.1);
 
             if(this.triggerValue){
                 Audio.playSound(this.fireSound, {
