@@ -89,19 +89,11 @@
                       textures: "http://ericrius1.github.io/PlatosCave/assets/star.png",
                     });
 
-                    Script.setTimeout(function() {
-                      Entities.editEntity(firework, {
-                        isEmitting: false
-                      });
-                    }, 1000);
-                  },
-
-                  preload: function(entityID) {
-                    _this.entityID = entityID;
-                    _this.position = Entities.getEntityProperties(_this.entityID, "position").position;
-
-                  }
-              };
+                Script.setTimeout(function() {
+                  Entities.editEntity(firework, {
+                    isEmitting: false
+                  });
+                }, 1000);
             }
         },
 
