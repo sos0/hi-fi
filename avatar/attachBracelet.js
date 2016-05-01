@@ -559,84 +559,24 @@ self.castTeleport = function() {
     position: MyAvatar.position,
     volume: 0.4
   });
-}
 
-self.castFireball = function() {
-  print('fireball');
-
-  var LAUNCH_FORCE = 10;
-  var FIRE_VOLUME = 0.4;
-  var SHOOTING_SOUND_URL = SoundCache.getSound("https://cdn.rawgit.com/sos0/hi-fi/master/assets/largeFireball.raw");
-
-  // Calculate vectors for correct positioning.
-  // Make sure the fireball launches directly where the user is facing, rather than where the palm is pointing
-  // (this turned out to be a little awkward because palm positioning is rather sensitive)
-  var rightPalmPosition = MyAvatar.getRightPalmPosition();
-  var rightPalmRotation = MyAvatar.getRightPalmRotation();
-  var centeredRightPalm = Vec3.sum(Vec3.multiply(0.25, Quat.getFront(MyAvatar.orientation)), rightPalmPosition);
-
-  // Launch fireball forward
-  var forwardVec = Quat.getFront(MyAvatar.headOrientation);
-      forwardVec = Vec3.normalize(forwardVec);
-      forwardVec = Vec3.multiply(forwardVec, LAUNCH_FORCE);
-
-  var properties = {
-      type: "Sphere",
-      shapeType: "sphere",
-      position: centeredRightPalm,
-      dimensions: { x: 0.65, y: 0.65, z: 0.65 },
-      color: { red: 200, green: 50, blue: 0 },
-      velocity: forwardVec,
-      damping: 0.00001,
-      dynamic: true,
-      lifetime: 6,
-      glowLevel: 100,
-      script: "https://gist.githubusercontent.com/sos0/e982c6827e252832f7e8face23ade619/raw/67d2fa0f3b06a31976b3af9443943f1b76ed8e9c/gistfile2.txt",
-      userData: JSON.stringify(
-        {"ProceduralEntity":{
-            "version":2,
-            "shaderUrl":"https://cdn.rawgit.com/sos0/hi-fi/master/shaders/flame.fs",
-            "channels": [
-            ],
-            "uniforms":{
-                "iControlMode":[1,0.5,0,0],
-                "iHandPos":[0,0,0,0],
-                "iTransferFunctionRange":[0,0,0,0],
-                "iLight":[-1,-1,1,1]
-            }
-        }
-      })
-    };
-
-  Audio.playSound(SHOOTING_SOUND_URL, {
-    position: MyAvatar.getRightPalmPosition(),
-    volume: FIRE_VOLUME
-  });
-  
-  var fireball = Entities.addEntity(properties);
-  var fireballProperties = Entities.getEntityProperties(fireball);
-
-  this.laserOffsets = {
-      y: 0.095
-  };
-  this.firingOffsets = {
-      z: 0.16
-  }
-  var upVec = Quat.getUp(MyAvatar.rotation);
-  var castPosition = Vec3.sum(this.position, Vec3.multiply(upVec, this.laserOffsets.y));
-  this.laserTip = castPosition;// Vec3.sum(castPosition, Vec3.multiply(forwardVec, this.laserLength));
-    castPosition = Vec3.sum(castPosition, Vec3.multiply(forwardVec, this.firingOffsets.z))
-
-  self.spellcastEntities.push(fireball);
-
+  var directionVector = Vec3.normalize( Quat.getFront(MyAvatar.headOrientation));
+  var origin =  Vec3.sum(Vec3.multiply(15,directionVector), MyAvatar.getHeadPosition());
+  print(JSON.stringify(origin), JSON.stringify(directionVector));
   var pickRay = {
-      origin: fireballProperties.position,
-      direction: forwardVec
+      origin:origin,
+      direction: directionVector
   };
-  print("fireball start ray", JSON.stringify(pickRay.origin));
+  print("teleport start ray", JSON.stringify(pickRay));
   var intersection = Entities.findRayIntersection(pickRay, true);
   if (intersection.intersects) {
-      renderExplosionOnHit(intersection.intersection);
+    var intersectedObjectName     = intersection.properties.name;
+    var intersectedObjectPosition = intersection.properties.position;
+      // print("intersection", JSON.stringify(intersection));
+      print("name", JSON.stringify(intersectedObjectName), "position", JSON.stringify(intersectedObjectPosition));
+      MyAvatar.position = intersectedObjectPosition;
+      // MyAvatar.orientation = MyAvatar.orientation
+      // renderExplosionOnHit(intersection.intersection);
       // Entities.deleteEntity(fireball);
   }
 
@@ -708,6 +648,75 @@ self.castFireball = function() {
     self.fireTrailParticleProperties.parentID = fireball;
     var fireTrail = Entities.addEntity(self.fireTrailParticleProperties);
   }
+}
+
+self.castFireball = function() {
+  print('fireball');
+
+  var LAUNCH_FORCE = 10;
+  var FIRE_VOLUME = 0.4;
+  var SHOOTING_SOUND_URL = SoundCache.getSound("https://cdn.rawgit.com/sos0/hi-fi/master/assets/largeFireball.raw");
+
+  // Calculate vectors for correct positioning.
+  // Make sure the fireball launches directly where the user is facing, rather than where the palm is pointing
+  // (this turned out to be a little awkward because palm positioning is rather sensitive)
+  var rightPalmPosition = MyAvatar.getRightPalmPosition();
+  var rightPalmRotation = MyAvatar.getRightPalmRotation();
+  var centeredRightPalm = Vec3.sum(Vec3.multiply(0.25, Quat.getFront(MyAvatar.orientation)), rightPalmPosition);
+
+  // Launch fireball forward
+  var forwardVec = Quat.getFront(MyAvatar.headOrientation);
+      forwardVec = Vec3.normalize(forwardVec);
+      forwardVec = Vec3.multiply(forwardVec, LAUNCH_FORCE);
+
+  var properties = {
+      type: "Sphere",
+      shapeType: "sphere",
+      position: centeredRightPalm,
+      dimensions: { x: 0.65, y: 0.65, z: 0.65 },
+      color: { red: 200, green: 50, blue: 0 },
+      velocity: forwardVec,
+      damping: 0.00001,
+      dynamic: true,
+      lifetime: 6,
+      glowLevel: 100,
+      script: "https://gist.githubusercontent.com/sos0/e982c6827e252832f7e8face23ade619/raw/67d2fa0f3b06a31976b3af9443943f1b76ed8e9c/gistfile2.txt",
+      userData: JSON.stringify(
+        {"ProceduralEntity":{
+            "version":2,
+            "shaderUrl":"https://cdn.rawgit.com/sos0/hi-fi/master/shaders/flame.fs",
+            "channels": [
+            ],
+            "uniforms":{
+                "iControlMode":[1,0.5,0,0],
+                "iHandPos":[0,0,0,0],
+                "iTransferFunctionRange":[0,0,0,0],
+                "iLight":[-1,-1,1,1]
+            }
+        }
+      })
+    };
+
+  Audio.playSound(SHOOTING_SOUND_URL, {
+    position: MyAvatar.getRightPalmPosition(),
+    volume: FIRE_VOLUME
+  });
+  
+  var fireball = Entities.addEntity(properties);
+  var fireballProperties = Entities.getEntityProperties(fireball);
+
+  this.laserOffsets = {
+      y: 0.095
+  };
+  this.firingOffsets = {
+      z: 0.16
+  }
+  var upVec = Quat.getUp(MyAvatar.rotation);
+  var castPosition = Vec3.sum(this.position, Vec3.multiply(upVec, this.laserOffsets.y));
+  this.laserTip = castPosition;// Vec3.sum(castPosition, Vec3.multiply(forwardVec, this.laserLength));
+    castPosition = Vec3.sum(castPosition, Vec3.multiply(forwardVec, this.firingOffsets.z))
+
+  self.spellcastEntities.push(fireball);
 }
 
 self.castShield = function() {
