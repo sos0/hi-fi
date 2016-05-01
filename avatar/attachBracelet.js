@@ -591,6 +591,7 @@ self.castFireball = function() {
       dynamic: true,
       lifetime: 3,
       glowLevel: 100,
+      script: "https://cdn.rawgit.com/sos0/hi-fi/master/entities/fireball.js",
       userData: JSON.stringify(
         {"ProceduralEntity":{
             "version":2,
