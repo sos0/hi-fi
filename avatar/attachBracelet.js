@@ -497,7 +497,8 @@ self.castFireball = function() {
   print('fireball');
   var rightPalmPosition = MyAvatar.getRightPalmPosition();
   var rightPalmRotation = MyAvatar.getRightPalmRotation();
-  var centeredRightPalm = Vec3.sum(Vec3.multiply(0.25, Quat.getUp(rightPalmRotation)), rightPalmPosition);
+  // var centeredRightPalm = Vec3.sum(Vec3.multiply(0.25, Quat.getUp(rightPalmRotation)), rightPalmPosition);
+  var centeredRightPalm = Vec3.sum(Vec3.multiply(0.25, Quat.getFront(MyAvatar.orientation)), rightPalmPosition);
 
   var properties = {
       type: "Model",
