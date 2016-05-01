@@ -580,11 +580,13 @@ self.castTeleport = function() {
         for( i = 0; i < collisionBox.length; i++){
           var collisionObjectProperties = Entities.getEntityProperties(collisionBox[i]);
             print(JSON.stringify(collisionObjectProperties));
-            if(collisionBox[i].properties.name === "teleport-sphere"){
-              MyAvatar.position = collisionBox[i].position;
+            if(collisionObjectProperties.properties.name === "teleport-sphere"){
+              MyAvatar.position = collisionObjectProperties.position;
               break;
             }
         }
+      // }else{
+        // MyAvatar.position = intersectedObjectPosition;
       }
 
       // MyAvatar.orientation = MyAvatar.orientation
