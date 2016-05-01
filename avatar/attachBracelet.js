@@ -574,7 +574,18 @@ self.castTeleport = function() {
     var intersectedObjectPosition = intersection.properties.position;
       // print("intersection", JSON.stringify(intersection));
       print("name", JSON.stringify(intersectedObjectName), "position", JSON.stringify(intersectedObjectPosition));
-      MyAvatar.position = intersectedObjectPosition;
+      if(intersectedObjectName === "teleport-sphere"){
+        MyAvatar.position = intersectedObjectPosition;
+      }
+
+      // var collisionBox = Entities.findEntities(MyAvatar.position, 20.0);
+      // if(collisionBox.length > 0){
+      //   for( i = 0; i < arrayFound.length; i++){
+      //       Entities.editEntity(arrayFound[i], {color: {red:200, blue:200, green:200}});
+      //       print("Turned a found entity to color: " + JSON.stringify(Entities.getEntityProperties(arrayFound[i]).color));
+      //   }
+      // }
+
       // MyAvatar.orientation = MyAvatar.orientation
       // renderExplosionOnHit(intersection.intersection);
       // Entities.deleteEntity(fireball);
