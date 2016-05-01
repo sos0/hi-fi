@@ -635,10 +635,25 @@ self.castShield = function() {
   print('shield');
   var SHOOTING_SOUND_URL = SoundCache.getSound("https://cdn.rawgit.com/sos0/hi-fi/master/assets/shield.raw");
 
+  var shieldPosition = Vec3.sum(Vec3.multiply(1.25, Quat.getFront(MyAvatar.orientation)), MyAvatar.position);
+
+  var properties = {
+      type: "Model",
+      shapeType: "box",
+      position: shieldPosition,
+      dimensions: { x: 1.00, y: 2.00, z: 0.25 },
+      color: { red: 100, green: 100, blue: 100 },
+      shapeType: "box",
+      lifetime: 5
+    };
+
   Audio.playSound(SHOOTING_SOUND_URL, {
     position: MyAvatar.position,
     volume: 0.4
   });
+  
+  var shield = Entities.addEntity(properties);
+  self.spellcastEntities.push(shield);
 }
 
 self.spellbook = {
