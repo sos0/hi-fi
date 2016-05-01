@@ -495,11 +495,22 @@ self.castTeleport = function() {
 
 self.castFireball = function() {
   print('fireball');
+
   var LAUNCH_FORCE = 9;
+  var FIRE_VOLUME = 0.2;
+  var SHOOTING_SOUND_URL = SoundCache.getSound("http://hifi-production.s3.amazonaws.com/tutorials/pistol/GUN-SHOT2.raw");
+
+  // Calculate vectors for correct positioning.
+  // Make sure the fireball launches directly where the user is facing, rather than where the palm is pointing
+  // (this turned out to be a little awkward because palm positioning is rather sensitive)
   var rightPalmPosition = MyAvatar.getRightPalmPosition();
   var rightPalmRotation = MyAvatar.getRightPalmRotation();
-  // var centeredRightPalm = Vec3.sum(Vec3.multiply(0.25, Quat.getUp(rightPalmRotation)), rightPalmPosition);
   var centeredRightPalm = Vec3.sum(Vec3.multiply(0.25, Quat.getFront(MyAvatar.orientation)), rightPalmPosition);
+
+  // Launch fireball forward
+  var forwardVec = Quat.getFront(MyAvatar.orientation);
+      forwardVec = Vec3.normalize(forwardVec);
+      forwardVec = Vec3.multiply(forwardVec, LAUNCH_FORCE);
 
   var properties = {
       type: "Sphere",
@@ -508,11 +519,14 @@ self.castFireball = function() {
       dimensions: { x: 0.3, y: 0.3, z: 0.3 },
       color: { red: 100, green: 100, blue: 100 },
       shapeType: "box",
+      velocity: forwardVec,
       damping: 0.00001,
-      lifetime: 3600,
-      userData: JSON.stringify({"ProceduralEntity":{
+      dynamic: true,
+      lifetime: 3,
+      userData: JSON.stringify(
+        {"ProceduralEntity":{
             "version":2,
-            "shaderUrl":"http://127.0.0.1:8080/flame.fs",
+            "shaderUrl":"https://cdn.rawgit.com/sos0/hi-fi/master/shaders/flame.fs",
             "channels": [
             ],
             "uniforms":{
@@ -523,12 +537,16 @@ self.castFireball = function() {
             }
         }
       })
-  };
+    };
 
+  Audio.playSound(SHOOTING_SOUND_URL, {
+    position: MyAvatar.getRightPalmPosition(),
+    volume: FIRE_VOLUME
+  });
+  
   var fireball = Entities.addEntity(properties);
   self.spellcastEntities.push(fireball);
 }
-
 
 self.castShield = function() {
   print('shield');
