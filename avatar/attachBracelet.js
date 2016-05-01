@@ -589,9 +589,9 @@ self.castFireball = function() {
       velocity: forwardVec,
       damping: 0.00001,
       dynamic: true,
-      lifetime: 3,
+      lifetime: 6,
       glowLevel: 100,
-      script: "https://cdn.rawgit.com/sos0/hi-fi/master/entities/fireball.js",
+      script: "https://gist.githubusercontent.com/sos0/e982c6827e252832f7e8face23ade619/raw/67d2fa0f3b06a31976b3af9443943f1b76ed8e9c/gistfile2.txt",
       userData: JSON.stringify(
         {"ProceduralEntity":{
             "version":2,
@@ -712,7 +712,7 @@ self.castFireball = function() {
 
 self.castShield = function() {
   print('shield');
-  var MODEL_URL = "https://dl.dropboxusercontent.com/s/pfacwpoodfl03fk/shield.fbx";
+  var MODEL_URL = "https://dl.dropboxusercontent.com/s/xv86s0j9k4fbp83/new_shield.fbx";
   var SHOOTING_SOUND_URL = SoundCache.getSound("https://cdn.rawgit.com/sos0/hi-fi/master/assets/shield.raw");
 
   var shieldPosition = Vec3.sum(Vec3.multiply(1.25, Quat.getFront(MyAvatar.orientation)), MyAvatar.position);
@@ -721,6 +721,7 @@ self.castShield = function() {
       type: "Model",
       shapeType: "box",
       position: shieldPosition,
+      rotation: MyAvatar.orientation,
       dimensions: { x: 1.00, y: 2.00, z: 0.5 },
       color: { red: 100, green: 100, blue: 100 },
       lifetime: 10,
@@ -810,8 +811,8 @@ Script.update.connect(myUpdate);
 Script.scriptEnding.connect(function(){
   Script.update.disconnect(myUpdate);
   self.deleteAllEmitters();
-  for(var i in self.spellcastEntities){
-    Entities.deleteEntity(self.spellcastEntities[i]);
-  }
+  // for(var i in self.spellcastEntities){
+  //   Entities.deleteEntity(self.spellcastEntities[i]);
+  // }
   self = undefined; //not sure if needed  ?
 })
