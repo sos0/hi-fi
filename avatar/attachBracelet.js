@@ -2,6 +2,15 @@ var self = {};
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //	Shape Detector
+// 
+//  FULL LICENSE: https://raw.githubusercontent.com/MathieuLoutre/shape-detector/master/LICENSE
+//  The MIT License (MIT)
+// 
+//  Copyright (c) 2014 Mathieu Triay
+//  
+//  Original License: Copyright (C) 2007-2012, Jacob O. Wobbrock, Andrew D. Wilson and Yang Li.
+//  All rights reserved.
+// 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 self.ShapeDetector = (function () {
 	var _nbSamplePoints;
@@ -423,7 +432,7 @@ self.particleProperties = {
     },
     particleRadius: 0.014999999888241291,
     radiusSpread: 1,
-    radiusStart: 0.04000000474974513,
+    radiusStart: 0.03000000474974513,
     radiusFinish: 0.0020000000474974513,
     colorSpread: {
         red: 125,
@@ -446,7 +455,6 @@ self.particleProperties = {
     alphaFinish: 0,
     emitterShouldTrail: true,
     textures: 'http://hifi-production.s3.amazonaws.com/tutorials/particleFingers/smoke.png',
-    // textures: 'http://127.0.0.1:8080/particle.png',
     lifetime: 3600
 };
 
@@ -507,17 +515,18 @@ self.onCastingUpdate = function() {
 self.onCastingEnded = function() {
 	print("Cast Ended");
 	var shape = self.shapeDetector.spot(self.positions);
+
+  print(shape.pattern, shape.score);
+  if(shape.score > 0.6){
+    if(self.spellbook[shape.pattern]) {
+      self.spellbook[shape.pattern]();
+    }
+    else {
+      // cast failed.
+    }
+  }
+
 	self.positions = [];
-
-	print(shape.pattern, shape.score);
-
-	if(self.spellbook[shape]) {
-		self.spellbook[shape]();
-	}
-	else {
-		// cast failed.
-	}
-
 	self.deleteAllEmitters();
 }
 
