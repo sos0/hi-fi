@@ -483,7 +483,7 @@ self.deleteAllEmitters = function() {
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //  Spellcast Entities
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+self.spellcastEntities = [];
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //	Spells
@@ -499,7 +499,7 @@ self.castFireball = function() {
   var newFrameRate = 29 + Math.random() * 30;
   var properties = {
       type: "Model",
-      lifetime: lifeTime,
+      lifetime: 3600,
       position: MyAvatar.getRightHandPosition(),
       rotation: Quat.fromPitchYawRollDegrees(-80 + Math.random() * 20, Math.random() * 360.0, 0.0),
       velocity: { x: 0, y: 0, z: 0 },
@@ -517,7 +517,8 @@ self.castFireball = function() {
       modelURL: "http://hifi-production.s3.amazonaws.com/tutorials/butterflies/butterfly.fbx"
   };
 
-  Entities.addEntity(properties);
+  var fireball = Entities.addEntity(self.properties);
+  self.spellcastEntities.push(fireball);
 }
 
 self.castShield = function() {
@@ -592,5 +593,8 @@ Script.update.connect(myUpdate);
 Script.scriptEnding.connect(function(){
 	Script.update.disconnect(myUpdate);
 	self.deleteAllEmitters();
+  for(var i in self.spellcastEntities){
+    Entities.deleteEntity(self.spellcastEntities[i]);
+  }
 	self = undefined; //not sure if needed  ?
 })
