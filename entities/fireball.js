@@ -1,7 +1,6 @@
 (function() {
 
     var _this = this;
-    _this.COLLISION_COOLDOWN_TIME = 1000;
 
     _this.preload = function(entityID) {
 
@@ -20,10 +19,8 @@
         //5 seconds after a collision, upright the cow.  protect from multiple collisions in a short timespan with the 'shouldUntipCow' variable
         if (_this.shouldUntipCow) {
             //in Hifi, preface setTimeout with Script.setTimeout
-            Script.setTimeout(function() {
-                _this.destroyFireball();
-                _this.shouldUntipCow = true;
-            }, _this.COLLISION_COOLDOWN_TIME);
+            _this.destroyFireball();
+            _this.shouldUntipCow = true;
         }
 
         _this.shouldUntipCow = false;
