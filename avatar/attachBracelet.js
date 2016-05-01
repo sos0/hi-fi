@@ -1,5 +1,7 @@
-//
-//
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//	Shape Detector
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 this.ShapeDetector = (function () {
 	var _nbSamplePoints;
 	var _squareSize = 250;
@@ -408,8 +410,10 @@ var MODEL_URL = "https://rawgit.com/sos0/hi-fi/master/assets/bracelet.fbx";
 
 MyAvatar.attach(MODEL_URL, "RightForeArm", {x: -0.0, y: -0.0, z: 0.0}, Quat.fromPitchYawRollDegrees(0, 0, 0), 0.2);
 
-this.isCasting = false;
-this.positions = [];
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//	Spells
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 this.castTeleport = function() {
 	print('teleport');
@@ -419,10 +423,17 @@ this.castFireball = function() {
 	print('fireball');
 }
 
-this.spells = {
+this.spellbook = {
 	circle: this.castTeleport,
 	triangle: this.castFireball
 }
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//	Spell Casting Logic
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+this.isCasting = false;
+this.positions = [];
 
 this.trackHand = function() {
 	var position = MyAvatar.getRightHandPosition();
@@ -433,14 +444,17 @@ this.onCastComplete = function() {
 	var shape = this.ShapeDetector(this.positions);
 	this.positions = [];
 
-	if(this.spells[shape]) {
-		this.spells[shape]();
+	if(this.spellbook[shape]) {
+		this.spellbook[shape]();
 	}
 	else {
 		// cast failed.
 	}
 }
 
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//	Update Loop
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 function myUpdate(){
   this.triggerValue = Controller.getValue(Controller.Standard.RT);
