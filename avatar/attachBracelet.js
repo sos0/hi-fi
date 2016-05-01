@@ -624,7 +624,7 @@ self.castFireball = function() {
       velocity: forwardVec,
       damping: 0.00001,
       dynamic: true,
-      lifetime: 6,
+      lifetime: 10,
       glowLevel: 100,
       script: "https://gist.githubusercontent.com/sos0/e982c6827e252832f7e8face23ade619/raw/67d2fa0f3b06a31976b3af9443943f1b76ed8e9c/gistfile2.txt",
       userData: JSON.stringify(
