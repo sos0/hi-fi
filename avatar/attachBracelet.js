@@ -374,7 +374,7 @@ self.ShapeDetector = (function () {
 //	Create and Attach Magical Bracelet
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-var MODEL_URL = "https://rawgit.com/sos0/hi-fi/master/assets/bracelet.fbx";
+var MODEL_URL = "https://dl.dropbox.com/s/sfrzxubqzpp6u1n/bracelet.fbx";
 // var MODEL_URL = "http://127.0.0.1:8080/bracelet.fbx";
 
 // var SCRIPT_URL = "https://rawgit.com/sos0/hi-fi/master/entities/box.js";
@@ -461,7 +461,7 @@ self.particleProperties = {
     particleRadius: 0.004999999888241291,
     radiusSpread: 0,
     radiusStart: 0.0010000000474974513,
-    radiusFinish: 0.0010000000474974513,
+    radiusFinish: 0.0020000000474974513,
     colorSpread: {
         red: 125,
         green: 125,
@@ -473,8 +473,8 @@ self.particleProperties = {
         blue: 125
     },
     colorFinish: {
-        red: 125,
-        green: 125,
+        red: 50,
+        green: 50,
         blue: 125
     },
     alpha: 1,
