@@ -579,75 +579,6 @@ self.castTeleport = function() {
       // renderExplosionOnHit(intersection.intersection);
       // Entities.deleteEntity(fireball);
   }
-
-  function renderExplosionOnHit(position){
-    var sparks = Entities.addEntity({
-        type: "ParticleEffect",
-        position: position,
-        lifetime: 4,
-        "name": "Sparks Emitter",
-        "color": {
-            red: 228,
-            green: 128,
-            blue: 12
-        },
-        "maxParticles": 1000,
-        "lifespan": 0.15,
-        "emitRate": 1000,
-        "emitSpeed": 1,
-        "speedSpread": 0,
-        "emitOrientation": {
-            "x": -0.4,
-            "y": 1,
-            "z": -0.2,
-            "w": 0.7071068286895752
-        },
-        "emitDimensions": {
-            "x": 0,
-            "y": 0,
-            "z": 0
-        },
-        "polarStart": 0,
-        "polarFinish": Math.PI,
-        "azimuthStart": -3.1415927410125732,
-        "azimuthFinish": 2,
-        "emitAcceleration": {
-            "x": 0,
-            "y": 0,
-            "z": 0
-        },
-        "accelerationSpread": {
-            "x": 0,
-            "y": 0,
-            "z": 0
-        },
-        "particleRadius": 0.03,
-        "radiusSpread": 0.04,
-        "radiusStart": 0.02,
-        "radiusFinish": 0.05,
-        "colorSpread": {
-            red: 100,
-            green: 100,
-            blue: 20
-        },
-        "alpha": 1,
-        "alphaSpread": 0,
-        "alphaStart": 0,
-        "alphaFinish": 0,
-        "additiveBlending": true,
-        "textures": "http://hifi-production.s3.amazonaws.com/tutorials/pistol/star.png"
-    });
-
-    Script.setTimeout(function() {
-        Entities.editEntity(sparks, {
-            isEmitting: false
-        });
-        print("position of recently deleted sphere: " + JSON.stringify(Entities.getEntityProperties(fireball).position));
-    }, 100);
-
-    self.fireTrailParticleProperties.parentID = fireball;
-    var fireTrail = Entities.addEntity(self.fireTrailParticleProperties);
-  }
 }
 
 self.castFireball = function() {
@@ -717,6 +648,87 @@ self.castFireball = function() {
     castPosition = Vec3.sum(castPosition, Vec3.multiply(forwardVec, this.firingOffsets.z))
 
   self.spellcastEntities.push(fireball);
+
+
+  var pickRay = {
+      origin: fireballProperties.position,
+      direction: forwardVec
+  };
+  print("fireball start ray", JSON.stringify(pickRay.origin));
+  var intersection = Entities.findRayIntersection(pickRay, true);
+  if (intersection.intersects) {
+      renderExplosionOnHit(intersection.intersection);
+      // Entities.deleteEntity(fireball);
+  }
+
+  function renderExplosionOnHit(position){
+    var sparks = Entities.addEntity({
+        type: "ParticleEffect",
+        position: position,
+        lifetime: 4,
+        "name": "Sparks Emitter",
+        "color": {
+            red: 228,
+            green: 128,
+            blue: 12
+        },
+        "maxParticles": 1000,
+        "lifespan": 0.15,
+        "emitRate": 1000,
+        "emitSpeed": 1,
+        "speedSpread": 0,
+        "emitOrientation": {
+            "x": -0.4,
+            "y": 1,
+            "z": -0.2,
+            "w": 0.7071068286895752
+        },
+        "emitDimensions": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "polarStart": 0,
+        "polarFinish": Math.PI,
+        "azimuthStart": -3.1415927410125732,
+        "azimuthFinish": 2,
+        "emitAcceleration": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "accelerationSpread": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "particleRadius": 0.03,
+        "radiusSpread": 0.04,
+        "radiusStart": 0.02,
+        "radiusFinish": 0.05,
+        "colorSpread": {
+            red: 100,
+            green: 100,
+            blue: 20
+        },
+        "alpha": 1,
+        "alphaSpread": 0,
+        "alphaStart": 0,
+        "alphaFinish": 0,
+        "additiveBlending": true,
+        "textures": "http://hifi-production.s3.amazonaws.com/tutorials/pistol/star.png"
+    });
+
+    Script.setTimeout(function() {
+        Entities.editEntity(sparks, {
+            isEmitting: false
+        });
+        print("position of recently deleted sphere: " + JSON.stringify(Entities.getEntityProperties(fireball).position));
+    }, 100);
+
+    self.fireTrailParticleProperties.parentID = fireball;
+    var fireTrail = Entities.addEntity(self.fireTrailParticleProperties);
+  }
 }
 
 self.castShield = function() {
@@ -800,7 +812,7 @@ self.onCastingEnded = function() {
 function myUpdate(){
   self.triggerValue = Controller.getValue(Controller.Standard.RT);
 
-  if(self.triggerValue === 1) {
+  if(self.triggerValue > 0.6) {
       if(!self.isCasting) {
         self.isCasting = true;
         self.onCastingBegan();
