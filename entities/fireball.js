@@ -18,7 +18,7 @@
         //5 seconds after a collision, upright the cow.  protect from multiple collisions in a short timespan with the 'shouldUntipCow' variable
         if (_this.shouldUntipCow) {
             //in Hifi, preface setTimeout with Script.setTimeout
-            _this.destroyFireball();
+            // _this.destroyFireball();
             _this.shouldUntipCow = true;
             Entity.deleteEntity(myId);
         }
