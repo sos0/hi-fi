@@ -530,7 +530,7 @@ self.spellbook = {
 
 self.isCasting = false;
 self.positions = [];
-
+self.shapeDetector = new self.ShapeDetector(self.ShapeDetector.defaultShapes);
 self.onCastingBegan = function() {
 	self.addEmitterAtRightHand();
 }
@@ -541,7 +541,7 @@ self.onCastingUpdate = function() {
 }
 
 self.onCastingEnded = function() {
-	var shape = self.ShapeDetector(self.positions);
+	var shape = self.shapeDetector.spot(self.positions);
 	self.positions = [];
 
 	if(self.spellbook[shape]) {
