@@ -29,6 +29,7 @@
     _this.destroyFireball = function() {
         // keep yaw but reset pitch and roll
         print("untip")
+        print(JSON.stringify(_this));
         Entity.deleteEntity(_this.entityID);
     }
 
