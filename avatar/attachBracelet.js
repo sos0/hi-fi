@@ -502,7 +502,7 @@ self.castTeleport = function() {
 self.castFireball = function() {
   print('fireball');
 
-  var LAUNCH_FORCE = 9;
+  var LAUNCH_FORCE = 10;
   var FIRE_VOLUME = 0.4;
   var SHOOTING_SOUND_URL = SoundCache.getSound("https://cdn.rawgit.com/sos0/hi-fi/master/assets/largeFireball.raw");
 
@@ -552,15 +552,18 @@ self.castFireball = function() {
   });
   
   var fireball = Entities.addEntity(properties);
+  var fireballProperties = Entities.getEntityProperties(fireball);
   self.spellcastEntities.push(fireball);
 
   var pickRay = {
-      origin: fireball.position,
+      origin: fireballProperties.position,
       direction: forwardVec
   };
+  print("fireball start ray", JSON.stringify(pickRay.origin));
   var intersection = Entities.findRayIntersection(pickRay, true);
   if (intersection.intersects) {
       renderExplosionOnHit(intersection.intersection);
+      // Entities.deleteEntity(fireball);
   }
 
   function renderExplosionOnHit(position){
@@ -605,9 +608,9 @@ self.castFireball = function() {
             "z": 0
         },
         "particleRadius": 0.03,
-        "radiusSpread": 0.02,
+        "radiusSpread": 0.04,
         "radiusStart": 0.02,
-        "radiusFinish": 0.03,
+        "radiusFinish": 0.05,
         "colorSpread": {
             red: 100,
             green: 100,
@@ -625,7 +628,6 @@ self.castFireball = function() {
         Entities.editEntity(sparks, {
             isEmitting: false
         });
-        // Entities.deleteEntity(fireball);
         print("position of recently deleted sphere: " + JSON.stringify(Entities.getEntityProperties(fireball).position));
     }, 100);
   }
