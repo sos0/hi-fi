@@ -505,7 +505,7 @@ self.deleteAllEmitters = function() {
 	}
 }
 
-//self.addEmitterAtRightHand();
+// self.addEmitterAtRightHand();
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //	Spells
@@ -532,6 +532,7 @@ self.isCasting = false;
 self.positions = [];
 self.shapeDetector = new self.ShapeDetector(self.ShapeDetector.defaultShapes);
 self.onCastingBegan = function() {
+	print("Cast Began");
 	self.addEmitterAtRightHand();
 }
 
@@ -541,8 +542,11 @@ self.onCastingUpdate = function() {
 }
 
 self.onCastingEnded = function() {
+	print("Cast Ended");
 	var shape = self.shapeDetector.spot(self.positions);
 	self.positions = [];
+
+	print(shape.pattern, shape.score);
 
 	if(self.spellbook[shape]) {
 		self.spellbook[shape]();
@@ -550,6 +554,8 @@ self.onCastingEnded = function() {
 	else {
 		// cast failed.
 	}
+
+	self.deleteAllEmitters();
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -560,20 +566,16 @@ function myUpdate(){
   self.triggerValue = Controller.getValue(Controller.Standard.RT);
 
   if(self.triggerValue === 1) {
-
   	  if(!self.isCasting) {
   	  	self.isCasting = true;
   	  	self.onCastingBegan();
   	  }
 
   	  self.onCastingUpdate();
-
-      Audio.playSound(self.fireSound, {
-          volume: self.fireVolume
-      });
   }
   else if(self.isCasting) {
   	self.isCasting = false;
+  	print("ended");
   	self.onCastingEnded();
   }
 }
