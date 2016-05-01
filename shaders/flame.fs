@@ -22,11 +22,11 @@ TransformCamera getTransformCamera() {
 vec2 windowToClipSpace(TransformCamera cam, vec2 viewportPos) {
     vec2 viewportSize = cam._viewport.zw;
     // Detect stereo case
-    if (gl_FragCoord.x > viewportSize.x) {
-        return ((viewportPos - vec2(viewportSize.x,0.0) - cam._viewport.xy) / cam._viewport.zw) * 2.0 - vec2(1.0); 
-    } else {
+    // if (gl_FragCoord.x > viewportSize.x) {
+    //     return ((viewportPos - vec2(viewportSize.x,0.0) - cam._viewport.xy) / cam._viewport.zw) * 2.0 - vec2(1.0); 
+    // } else {
         return ((viewportPos - cam._viewport.xy) / cam._viewport.zw) * 2.0 - vec2(1.0); 
-    }
+    // }
 }
 
 vec3 clipToEyeSpace(TransformCamera cam, vec3 clipPos) {
