@@ -395,6 +395,68 @@ MyAvatar.attach(MODEL_URL, "RightForeArm", {x: 0.000, y: 0.130, z: -0.015}, Quat
 self.particleEntities = [];
 var PARICLE_NAME_BASE = 'spawnedSpellParticle'
 
+//Fire Ball Trail
+self.fireTrailParticleProperties = {
+    type: 'ParticleEffect',
+    color: {
+        red: 125,
+        green: 125,
+        blue: 125
+    },
+    isEmitting: 1,
+    maxParticles: 1000,
+    lifespan: 20,
+    emitRate: 1000,
+    emitSpeed: 0,
+    speedSpread: 0,
+    emitOrientation: {
+        x: -0.7035577893257141,
+        y: -0.000015259007341228426,
+        z: -0.000015259007341228426,
+        w: 0.7106381058692932
+    },
+    emitRadiusStart: 0.5,
+    polarStart: 0,
+    polarFinish: 0,
+    azimuthFinish: 3.1415927410125732,
+    emitAcceleration: {
+        x: 0,
+        y: 0,
+        z: 0
+    },
+    accelerationSpread: {
+        x: 0,
+        y: 0,
+        z: 0
+    },
+    particleRadius: 1,
+    radiusSpread: 1,
+    radiusStart: 0.1,
+    radiusFinish: 0.0020000000474974513,
+    colorSpread: {
+        red: 125,
+        green: 125,
+        blue: 125
+    },
+    colorStart: {
+        red: 125,
+        green: 50,
+        blue: 50
+    },
+    colorFinish: {
+        red: 125,
+        green: 125,
+        blue: 125
+    },
+    alpha: 1,
+    alphaSpread: 0,
+    alphaStart: 1,
+    alphaFinish: 0,
+    emitterShouldTrail: true,
+    textures: 'http://hifi-production.s3.amazonaws.com/tutorials/particleFingers/smoke.png',
+    lifetime: 3000
+};
+
 // what the actual particles look like
 self.particleProperties = {
     type: 'ParticleEffect',
@@ -406,7 +468,7 @@ self.particleProperties = {
     },
     isEmitting: 1,
     maxParticles: 1000,
-    lifespan: 1,
+    lifespan: 20,
     emitRate: 1000,
     emitSpeed: 0,
     speedSpread: 0,
@@ -514,7 +576,7 @@ self.castFireball = function() {
   var centeredRightPalm = Vec3.sum(Vec3.multiply(0.25, Quat.getFront(MyAvatar.orientation)), rightPalmPosition);
 
   // Launch fireball forward
-  var forwardVec = Quat.getFront(MyAvatar.orientation);
+  var forwardVec = Quat.getFront(MyAvatar.headOrientation);
       forwardVec = Vec3.normalize(forwardVec);
       forwardVec = Vec3.multiply(forwardVec, LAUNCH_FORCE);
 
@@ -523,13 +585,12 @@ self.castFireball = function() {
       shapeType: "sphere",
       position: centeredRightPalm,
       dimensions: { x: 0.65, y: 0.65, z: 0.65 },
-      color: { red: 100, green: 100, blue: 100 },
-      shapeType: "box",
+      color: { red: 200, green: 50, blue: 0 },
       velocity: forwardVec,
       damping: 0.00001,
       dynamic: true,
       lifetime: 3,
-      glowLevel: 1,
+      glowLevel: 100,
       userData: JSON.stringify(
         {"ProceduralEntity":{
             "version":2,
@@ -553,6 +614,18 @@ self.castFireball = function() {
   
   var fireball = Entities.addEntity(properties);
   var fireballProperties = Entities.getEntityProperties(fireball);
+
+  this.laserOffsets = {
+      y: 0.095
+  };
+  this.firingOffsets = {
+      z: 0.16
+  }
+  var upVec = Quat.getUp(MyAvatar.rotation);
+  var castPosition = Vec3.sum(this.position, Vec3.multiply(upVec, this.laserOffsets.y));
+  this.laserTip = castPosition;// Vec3.sum(castPosition, Vec3.multiply(forwardVec, this.laserLength));
+    castPosition = Vec3.sum(castPosition, Vec3.multiply(forwardVec, this.firingOffsets.z))
+
   self.spellcastEntities.push(fireball);
 
   var pickRay = {
@@ -630,11 +703,15 @@ self.castFireball = function() {
         });
         print("position of recently deleted sphere: " + JSON.stringify(Entities.getEntityProperties(fireball).position));
     }, 100);
+
+    self.fireTrailParticleProperties.parentID = fireball;
+    var fireTrail = Entities.addEntity(self.fireTrailParticleProperties);
   }
 }
 
 self.castShield = function() {
   print('shield');
+  var MODEL_URL = "https://dl.dropboxusercontent.com/s/pfacwpoodfl03fk/shield.fbx";
   var SHOOTING_SOUND_URL = SoundCache.getSound("https://cdn.rawgit.com/sos0/hi-fi/master/assets/shield.raw");
 
   var shieldPosition = Vec3.sum(Vec3.multiply(1.25, Quat.getFront(MyAvatar.orientation)), MyAvatar.position);
@@ -643,10 +720,10 @@ self.castShield = function() {
       type: "Model",
       shapeType: "box",
       position: shieldPosition,
-      dimensions: { x: 1.00, y: 2.00, z: 0.25 },
+      dimensions: { x: 1.00, y: 2.00, z: 0.5 },
       color: { red: 100, green: 100, blue: 100 },
-      shapeType: "box",
-      lifetime: 5
+      lifetime: 10,
+      modelURL: MODEL_URL
     };
 
   Audio.playSound(SHOOTING_SOUND_URL, {
