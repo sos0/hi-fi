@@ -478,6 +478,38 @@ self.deleteAllEmitters = function() {
 
 // self.addEmitterAtRightHand();
 
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//  Spellcast Entities
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+var FIREBALL_SCRIPT_URL = "http://hifi-production.s3.amazonaws.com/tutorials/entity_scripts/pistol.js";
+var FIREBALL_MODEL_URL = "http://hifi-production.s3.amazonaws.com/tutorials/pistol/gun.fbx";
+var COLLISION_SOUND_URL = 'http://hifi-production.s3.amazonaws.com/tutorials/pistol/drop.wav'
+
+var fireballProperties = {
+  type: 'Model',
+  modelURL: FIREBALL_MODEL_URL,
+  position: MyAvatar.getRightHandPosition(),
+  dimensions: {
+    x: 0.3,
+    y: 0.3,
+    z: 0.3
+  },
+  script: FIREBALL_SCRIPT_URL,
+  color: {
+    red: 200,
+    green: 0,
+    blue: 20
+  },
+  shapeType: 'box',
+  dynamic: true,
+  lifetime: 3600,
+  restitution: 0,
+  damping: 0.5,
+  collisionSoundURL: COLLISION_SOUND_URL
+};
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //	Spells
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -487,12 +519,18 @@ self.castTeleport = function() {
 }
 
 self.castFireball = function() {
-	print('fireball');
+  print('fireball');
+  Entities.addEntity(fireballProperties);
+}
+
+self.castShield = function() {
+  print('shield');
 }
 
 self.spellbook = {
 	circle: self.castTeleport,
-	triangle: self.castFireball
+	triangle: self.castFireball,
+  square: self.castShield
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
