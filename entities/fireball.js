@@ -3,7 +3,6 @@
     var _this = this;
 
     _this.preload = function(entityID) {
-
         //set our id so other methods can get it. 
         _this.entityID = entityID;
         //load the mooing sound
@@ -21,16 +20,17 @@
             //in Hifi, preface setTimeout with Script.setTimeout
             _this.destroyFireball();
             _this.shouldUntipCow = true;
+            Entity.deleteEntity(myId);
         }
 
         _this.shouldUntipCow = false;
     }
 
-    _this.destroyFireball = function() {
-        // keep yaw but reset pitch and roll
-        print("untip")
-        print(JSON.stringify(_this));
-        Entity.deleteEntity(_this.entityID);
-    }
+    // _this.destroyFireball = function() {
+    //     // keep yaw but reset pitch and roll
+    //     print("untip")
+    //     print(JSON.stringify(_this));
+    //     Entity.deleteEntity(_this.entityID);
+    // }
 
 });
