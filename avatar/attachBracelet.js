@@ -483,32 +483,7 @@ self.deleteAllEmitters = function() {
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //  Spellcast Entities
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-var FIREBALL_SCRIPT_URL = "http://hifi-production.s3.amazonaws.com/tutorials/entity_scripts/pistol.js";
-var FIREBALL_MODEL_URL = "http://hifi-production.s3.amazonaws.com/tutorials/pistol/gun.fbx";
-var COLLISION_SOUND_URL = 'http://hifi-production.s3.amazonaws.com/tutorials/pistol/drop.wav'
 
-var fireballProperties = {
-  type: 'Model',
-  modelURL: FIREBALL_MODEL_URL,
-  position: MyAvatar.getRightHandPosition(),
-  dimensions: {
-    x: 0.3,
-    y: 0.3,
-    z: 0.3
-  },
-  script: FIREBALL_SCRIPT_URL,
-  color: {
-    red: 200,
-    green: 0,
-    blue: 20
-  },
-  shapeType: 'box',
-  dynamic: true,
-  lifetime: 3600,
-  restitution: 0,
-  damping: 0.5,
-  collisionSoundURL: COLLISION_SOUND_URL
-};
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //	Spells
@@ -520,7 +495,29 @@ self.castTeleport = function() {
 
 self.castFireball = function() {
   print('fireball');
-  Entities.addEntity(fireballProperties);
+  var GRAVITY = -0.2;
+  var newFrameRate = 29 + Math.random() * 30;
+  var properties = {
+      type: "Model",
+      lifetime: lifeTime,
+      position: MyAvatar.getRightHandPosition(),
+      rotation: Quat.fromPitchYawRollDegrees(-80 + Math.random() * 20, Math.random() * 360.0, 0.0),
+      velocity: { x: 0, y: 0, z: 0 },
+      gravity: { x: 0, y: GRAVITY, z: 0 },
+      damping: 0.00001,
+      dimensions: { x: 0.3, y: 0.3, z: 0.3 },
+      color: { red: 100, green: 100, blue: 100 },
+      animation: { 
+          url: "http://hifi-production.s3.amazonaws.com/tutorials/butterflies/butterfly.fbx",
+          fps: newFrameRate,
+          loop: true,
+          running: true,
+          startAutomatically:false
+      },
+      modelURL: "http://hifi-production.s3.amazonaws.com/tutorials/butterflies/butterfly.fbx"
+  };
+
+  Entities.addEntity(properties);
 }
 
 self.castShield = function() {
