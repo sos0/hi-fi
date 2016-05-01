@@ -374,46 +374,9 @@ self.ShapeDetector = (function () {
 //	Create and Attach Magical Bracelet
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-var MODEL_URL = "https://dl.dropbox.com/s/sfrzxubqzpp6u1n/bracelet.fbx";
-// var MODEL_URL = "http://127.0.0.1:8080/bracelet.fbx";
+var MODEL_URL = "https://dl.dropboxusercontent.com/s/sfrzxubqzpp6u1n/bracelet.fbx";
 
-// var SCRIPT_URL = "https://rawgit.com/sos0/hi-fi/master/entities/box.js";
-// var boxProperties = {
-//   type: 'Model',
-//   modelURL: MODEL_URL,
-//   script: SCRIPT_URL,
-//   parentID: MyAvatar.sessionUUID,
-//   dimensions: {
-//     x: 0.1,
-//     y: 0.1,
-//     z: 0.1
-//   },
-//   color: {
-//     red: 200,
-//     green: 0,
-//     blue: 20
-//   },
-//   shapeType: 'box',
-//   lifetime: -1,
-//   restitution: 0,
-//   collisionless: true
-// };
-
-// function attachEntityAtArm(jointName) {
-//     var jointID = MyAvatar.jointNames.indexOf(jointName);
-//     boxProperties.name = jointName;
-//     boxProperties.parentJointIndex = jointID;
-//     boxProperties.position =  MyAvatar.getJointPosition(jointName);
-
-//     return Entities.addEntity(boxProperties);
-// }
-
-// Entities.addingEntity.connect(function(entityID){
-//   print ("Entity added.");
-// });
-// attachEntityAtArm("RightForeArm");
-
-MyAvatar.attach(MODEL_URL, "RightHand", {x: -0.0, y: -0.0, z: -0.005}, Quat.fromPitchYawRollDegrees(-90, 0, 90), 0.1);
+MyAvatar.attach(MODEL_URL, "RightForeArm", {x: 0.000, y: 0.130, z: -0.015}, Quat.fromPitchYawRollDegrees(-100, 0, 83), 0.1);
 
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -458,9 +421,9 @@ self.particleProperties = {
         y: 0,
         z: 0
     },
-    particleRadius: 0.004999999888241291,
-    radiusSpread: 0,
-    radiusStart: 0.0010000000474974513,
+    particleRadius: 0.014999999888241291,
+    radiusSpread: 1,
+    radiusStart: 0.04000000474974513,
     radiusFinish: 0.0020000000474974513,
     colorSpread: {
         red: 125,
@@ -468,13 +431,13 @@ self.particleProperties = {
         blue: 125
     },
     colorStart: {
-        red: 125,
-        green: 125,
-        blue: 125
+        red: 20,
+        green: 20,
+        blue: 100
     },
     colorFinish: {
-        red: 50,
-        green: 50,
+        red: 125,
+        green: 125,
         blue: 125
     },
     alpha: 1,
