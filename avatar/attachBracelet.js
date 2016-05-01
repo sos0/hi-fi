@@ -1,8 +1,9 @@
+var self = {};
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //	Shape Detector
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-this.ShapeDetector = (function () {
+self.ShapeDetector = (function () {
 	var _nbSamplePoints;
 	var _squareSize = 250;
 	var _phi = 0.5 * (-1.0 + Math.sqrt(5.0));
@@ -367,10 +368,14 @@ this.ShapeDetector = (function () {
 
 	return ShapeDetector;
 })();
-//
-//
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//	Create and Attach Magical Bracelet
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 var MODEL_URL = "https://rawgit.com/sos0/hi-fi/master/assets/bracelet.fbx";
+// var MODEL_URL = "http://127.0.0.1:8080/bracelet.fbx";
 
 // var SCRIPT_URL = "https://rawgit.com/sos0/hi-fi/master/entities/box.js";
 // var boxProperties = {
@@ -396,7 +401,7 @@ var MODEL_URL = "https://rawgit.com/sos0/hi-fi/master/assets/bracelet.fbx";
 
 // function attachEntityAtArm(jointName) {
 //     var jointID = MyAvatar.jointNames.indexOf(jointName);
-//     boxProperties.name = jointName; 
+//     boxProperties.name = jointName;
 //     boxProperties.parentJointIndex = jointID;
 //     boxProperties.position =  MyAvatar.getJointPosition(jointName);
 
@@ -408,44 +413,139 @@ var MODEL_URL = "https://rawgit.com/sos0/hi-fi/master/assets/bracelet.fbx";
 // });
 // attachEntityAtArm("RightForeArm");
 
-MyAvatar.attach(MODEL_URL, "RightForeArm", {x: -0.0, y: -0.0, z: 0.0}, Quat.fromPitchYawRollDegrees(0, 0, 0), 0.2);
+MyAvatar.attach(MODEL_URL, "RightHand", {x: -0.0, y: -0.0, z: -0.005}, Quat.fromPitchYawRollDegrees(-90, 0, 90), 0.1);
 
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//	Spell Casting Particles
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+self.particleEntities = [];
+var PARICLE_NAME_BASE = 'spawnedSpellParticle'
+
+// what the actual particles look like
+self.particleProperties = {
+    type: 'ParticleEffect',
+    parentID: MyAvatar.sessionUUID,
+    color: {
+        red: 125,
+        green: 125,
+        blue: 125
+    },
+    isEmitting: 1,
+    maxParticles: 1000,
+    lifespan: 1,
+    emitRate: 1000,
+    emitSpeed: 0,
+    speedSpread: 0,
+    emitOrientation: {
+        x: -0.7035577893257141,
+        y: -0.000015259007341228426,
+        z: -0.000015259007341228426,
+        w: 0.7106381058692932
+    },
+    emitRadiusStart: 1,
+    polarStart: 0,
+    polarFinish: 0,
+    azimuthFinish: 3.1415927410125732,
+    emitAcceleration: {
+        x: 0,
+        y: 0,
+        z: 0
+    },
+    accelerationSpread: {
+        x: 0,
+        y: 0,
+        z: 0
+    },
+    particleRadius: 0.004999999888241291,
+    radiusSpread: 0,
+    radiusStart: 0.0010000000474974513,
+    radiusFinish: 0.0010000000474974513,
+    colorSpread: {
+        red: 125,
+        green: 125,
+        blue: 125
+    },
+    colorStart: {
+        red: 125,
+        green: 125,
+        blue: 125
+    },
+    colorFinish: {
+        red: 125,
+        green: 125,
+        blue: 125
+    },
+    alpha: 1,
+    alphaSpread: 0,
+    alphaStart: 1,
+    alphaFinish: 0,
+    emitterShouldTrail: true,
+    textures: 'http://hifi-production.s3.amazonaws.com/tutorials/particleFingers/smoke.png',
+    // textures: 'http://127.0.0.1:8080/particle.png',
+    lifetime: 3600
+};
+
+self.addEmitterAtRightHand = function() {
+	jointName = 'RightHand';
+
+    var jointID = MyAvatar.jointNames.indexOf(jointName);
+    self.particleProperties.name = PARICLE_NAME_BASE + jointName; 
+    self.particleProperties.parentJointIndex = jointID;
+    //position =  MyAvatar.getJointPosition(jointName);
+
+    var emitter = Entities.addEntity(self.particleProperties);
+    self.particleEntities.push(emitter);
+}
+
+self.deleteAllEmitters = function() {
+	for (var i = 0; i < self.particleEntities.length; i++) {
+		Entities.deleteEntity(self.particleEntities[i]);
+	}
+}
+
+//self.addEmitterAtRightHand();
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //	Spells
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-this.castTeleport = function() {
+self.castTeleport = function() {
 	print('teleport');
 }
 
-this.castFireball = function() {
+self.castFireball = function() {
 	print('fireball');
 }
 
-this.spellbook = {
-	circle: this.castTeleport,
-	triangle: this.castFireball
+self.spellbook = {
+	circle: self.castTeleport,
+	triangle: self.castFireball
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //	Spell Casting Logic
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-this.isCasting = false;
-this.positions = [];
+self.isCasting = false;
+self.positions = [];
 
-this.trackHand = function() {
-	var position = MyAvatar.getRightHandPosition();
-	this.positions.push(position);
+self.onCastingBegan = function() {
+	self.addEmitterAtRightHand();
 }
 
-this.onCastComplete = function() {
-	var shape = this.ShapeDetector(this.positions);
-	this.positions = [];
+self.onCastingUpdate = function() {
+	var position = MyAvatar.getRightHandPosition();
+	self.positions.push(position);
+}
 
-	if(this.spellbook[shape]) {
-		this.spellbook[shape]();
+self.onCastingEnded = function() {
+	var shape = self.ShapeDetector(self.positions);
+	self.positions = [];
+
+	if(self.spellbook[shape]) {
+		self.spellbook[shape]();
 	}
 	else {
 		// cast failed.
@@ -457,25 +557,31 @@ this.onCastComplete = function() {
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 function myUpdate(){
-  this.triggerValue = Controller.getValue(Controller.Standard.RT);
+  self.triggerValue = Controller.getValue(Controller.Standard.RT);
 
-  if(this.triggerValue === 1){
-  	  this.isCasting = true;
+  if(self.triggerValue === 1) {
 
-  	  this.trackHand();
+  	  if(!self.isCasting) {
+  	  	self.isCasting = true;
+  	  	self.onCastingBegan();
+  	  }
 
-      Audio.playSound(this.fireSound, {
-          volume: this.fireVolume
+  	  self.onCastingUpdate();
+
+      Audio.playSound(self.fireSound, {
+          volume: self.fireVolume
       });
   }
-  else if(this.isCasting) {
-  	this.isCasting = false;
-  	this.onCastComplete();
+  else if(self.isCasting) {
+  	self.isCasting = false;
+  	self.onCastingEnded();
   }
 }
 
-Script.update.connect(myUpdate)
+Script.update.connect(myUpdate);
 
 Script.scriptEnding.connect(function(){
-  Script.update.disconnect(myUpdate)
+	Script.update.disconnect(myUpdate);
+	self.deleteAllEmitters();
+	self = undefined; //not sure if needed  ?
 })
