@@ -21,7 +21,7 @@
         if (_this.shouldUntipCow) {
             //in Hifi, preface setTimeout with Script.setTimeout
             Script.setTimeout(function() {
-                _this.untipCow();
+                _this.destroyFireball();
                 _this.shouldUntipCow = true;
             }, _this.COLLISION_COOLDOWN_TIME);
         }
@@ -29,9 +29,10 @@
         _this.shouldUntipCow = false;
     }
 
-    _this.untipCow = function() {
+    _this.destroyFireball = function() {
         // keep yaw but reset pitch and roll
         print("untip")
+        Entity.deleteEntity(_this.entityID);
     }
 
 });
