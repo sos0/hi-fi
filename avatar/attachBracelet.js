@@ -385,7 +385,7 @@ self.ShapeDetector = (function () {
 
 var MODEL_URL = "https://dl.dropboxusercontent.com/s/sfrzxubqzpp6u1n/bracelet.fbx";
 
-MyAvatar.attach(MODEL_URL, "RightForeArm", {x: 0.000, y: 0.130, z: -0.015}, Quat.fromPitchYawRollDegrees(-100, 0, 83), 0.1);
+MyAvatar.attach(MODEL_URL, "RightForeArm", {x: 0.020, y: 0.180, z: -0.005}, Quat.fromPitchYawRollDegrees(-149, 0, 100), 0.1);
 
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
