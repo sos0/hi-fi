@@ -576,11 +576,12 @@ self.castTeleport = function() {
       print("name", JSON.stringify(intersectedObjectName), "position", JSON.stringify(intersectedObjectPosition));
 
       var collisionBox = Entities.findEntities(intersectedObjectPosition, 40.0);
-      print(JSON.stringify(collisionBox));
       if(collisionBox.length > 0){
+        print("Found " + collisionBox.length + " items in the collision box.");
         for( i = 0; i < collisionBox.length; i++){
           var collisionObjectProperties = Entities.getEntityProperties(collisionBox[i]);
-          if(collisionObjectProperties.properties.name === "teleport-sphere"){
+          if(collisionObjectProperties.name == "teleport-sphere"){
+            print("Sphere properties", JSON.stringify(collisionObjectProperties));
             MyAvatar.position = collisionObjectProperties.position;
             break;
           }
