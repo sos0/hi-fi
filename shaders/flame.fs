@@ -22,11 +22,11 @@ TransformCamera getTransformCamera() {
 vec2 windowToClipSpace(TransformCamera cam, vec2 viewportPos) {
     vec2 viewportSize = cam._viewport.zw;
     // Detect stereo case
-    // if (gl_FragCoord.x > viewportSize.x) {
-    //     return ((viewportPos - vec2(viewportSize.x,0.0) - cam._viewport.xy) / cam._viewport.zw) * 2.0 - vec2(1.0); 
-    // } else {
+    if (gl_FragCoord.x > viewportSize.x) {
+        return ((viewportPos - vec2(viewportSize.x,0.0) - cam._viewport.xy) / cam._viewport.zw) * 2.0 - vec2(1.0); 
+    } else {
         return ((viewportPos - cam._viewport.xy) / cam._viewport.zw) * 2.0 - vec2(1.0); 
-    // }
+    }
 }
 
 vec3 clipToEyeSpace(TransformCamera cam, vec3 clipPos) {
@@ -187,7 +187,7 @@ void evalBoxVolumeRay(in vec3 fragPos, out vec3 rayIn, out vec3 rayOut, out vec3
     vec3 eyePosW = eyeToWorldSpace(camera, eyePosE);
     vec3 eyeDirW = eyeToWorldSpaceDir(camera, eyePosE);
 
-    vec3 fragPosV = _position.xyz * VOLUME_SCALE; 
+    vec3 fragPosV = _position.xyz * VOLUME_SCALE;
 
     vec3 oriToEyeW = eyePosW - oriPosW;
     vec3 eyePosV = oriToEyeW * VOLUME_SCALE / (0.5 * iWorldScale);
