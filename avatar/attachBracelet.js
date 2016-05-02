@@ -385,7 +385,7 @@ self.ShapeDetector = (function () {
 
 var MODEL_URL = "https://dl.dropboxusercontent.com/s/sfrzxubqzpp6u1n/bracelet.fbx";
 
-MyAvatar.attach(MODEL_URL, "RightForeArm", {x: 0.000, y: 0.130, z: -0.015}, Quat.fromPitchYawRollDegrees(-100, 0, 83), 0.1);
+MyAvatar.attach(MODEL_URL, "RightForeArm", {x: 0.020, y: 0.180, z: -0.005}, Quat.fromPitchYawRollDegrees(-149, 0, 100), 0.1);
 
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -574,7 +574,22 @@ self.castTeleport = function() {
     var intersectedObjectPosition = intersection.properties.position;
       // print("intersection", JSON.stringify(intersection));
       print("name", JSON.stringify(intersectedObjectName), "position", JSON.stringify(intersectedObjectPosition));
-      MyAvatar.position = intersectedObjectPosition;
+
+      var collisionBox = Entities.findEntities(intersectedObjectPosition, 40.0);
+      if(collisionBox.length > 0){
+        print("Found " + collisionBox.length + " items in the collision box.");
+        for( i = 0; i < collisionBox.length; i++){
+          var collisionObjectProperties = Entities.getEntityProperties(collisionBox[i]);
+          if(collisionObjectProperties.name == "teleport-sphere"){
+            print("Sphere properties", JSON.stringify(collisionObjectProperties));
+            MyAvatar.position = collisionObjectProperties.position;
+            break;
+          }
+        }
+      }else{
+        MyAvatar.position = intersectedObjectPosition;
+      }
+
       // MyAvatar.orientation = MyAvatar.orientation
       // renderExplosionOnHit(intersection.intersection);
       // Entities.deleteEntity(fireball);
@@ -609,7 +624,7 @@ self.castFireball = function() {
       velocity: forwardVec,
       damping: 0.00001,
       dynamic: true,
-      lifetime: 6,
+      lifetime: 10,
       glowLevel: 100,
       script: "https://gist.githubusercontent.com/sos0/e982c6827e252832f7e8face23ade619/raw/67d2fa0f3b06a31976b3af9443943f1b76ed8e9c/gistfile2.txt",
       userData: JSON.stringify(
